@@ -1,0 +1,75 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace LoxInterpreter;
+
+internal class Lox
+{
+    static bool hadError = false;
+
+    public static int Start(string[] args)
+    {
+        if (args.Length > 1)
+        {
+            Console.WriteLine("Usage: jlox [script]");
+        }
+        else if (args.Length == 1)
+        {
+            return RunFile(args[0]);
+        }
+        else
+        {
+            RunPrompt();
+        }
+        return 0;
+    }
+
+    private static int RunFile(string path)
+    {
+        var fileContents = File.ReadAllText(path);
+        Run(fileContents);
+
+        if (hadError) return 65;
+
+        return 0;
+    }
+
+    private static void RunPrompt()
+    {
+        while(true)
+        {
+            var line = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(line))
+                return;
+            Run(line);
+            hadError = false;
+        }
+    }
+
+    private static void Run(string source)
+    {
+        var scanner = new Scanner(source);
+        var tokens = scanner.ScanTokens();
+
+        // For now, just print the tokens.
+        foreach (var token in tokens)
+        {
+            Console.WriteLine(token);
+        }
+    }
+
+    public static void Error(int line, string message)
+    {
+        Report(line, "", message);
+    }
+
+    private static void Report(int line, string where, string message)
+    {
+        Console.WriteLine($"[line {line}] Error{where}: {message}");
+        hadError = true;
+    }
+}
