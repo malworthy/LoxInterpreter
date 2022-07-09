@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LoxInterpreter;
-internal class Scanner
+public class Scanner
 {
     private readonly string source;
     private readonly List<Token> tokens = new();

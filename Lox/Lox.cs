@@ -7,7 +7,7 @@ using System.IO;
 
 namespace LoxInterpreter;
 
-internal class Lox
+public class Lox
 {
     static bool hadError = false;
 
@@ -65,6 +65,17 @@ internal class Lox
     public static void Error(int line, string message)
     {
         Report(line, "", message);
+    }
+    public static void Error(Token token, String message)
+    {
+        if (token.Type == TokenType.EOF)
+        {
+            Report(token.Line, " at end", message);
+        }
+        else
+        {
+            Report(token.Line, $" at '{token.Lexme}'", message);
+        }
     }
 
     private static void Report(int line, string where, string message)

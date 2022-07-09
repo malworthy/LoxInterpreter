@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LoxInterpreter;
-internal record Token
+public record Token
 {
     public TokenType Type { get; init; }
     public string Lexme { get; init; } = string.Empty;
