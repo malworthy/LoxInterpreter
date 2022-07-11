@@ -19,7 +19,7 @@ public class ParserTests
         var scanner = new Scanner(source);
         var tokens = scanner.ScanTokens();
         var parser = new Parser(tokens);
-        var expr = parser.Parse();
+        var expr = parser.ParseExpression();
         var result = new AstPrinter().Print(expr);
 
         Assert.Equal(expected, result);

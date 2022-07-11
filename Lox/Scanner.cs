@@ -139,7 +139,11 @@ public class Scanner
 
             while (char.IsDigit(Peek())) Advance();
         }
-        AddToken(TokenType.NUMBER, decimal.Parse(source[start..current]));
+        if (!decimal.TryParse(source[start..current], out var result))
+        {
+            Lox.Error(line, "Not a valid number (too large or too small)");
+        }
+        AddToken(TokenType.NUMBER, result);
     }
 
     private void ParseString()

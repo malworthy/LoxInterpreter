@@ -4,18 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using LoxInterpreter.Exceptions;
 
 namespace LoxInterpreter;
 
 public class Lox
 {
     static bool hadError = false;
+    private static readonly Interpreter interpreter = new();
 
     public static int Start(string[] args)
     {
         if (args.Length > 1)
         {
-            Console.WriteLine("Usage: jlox [script]");
+            Console.WriteLine("Usage: lox [script]");
         }
         else if (args.Length == 1)
         {
@@ -50,16 +52,34 @@ public class Lox
         }
     }
 
+    internal static void RuntimeError(RuntimeException error)
+    {
+        Lox.Report(error.Token.Line, "", error.Message);
+    }
+
     private static void Run(string source)
     {
-        var scanner = new Scanner(source);
-        var tokens = scanner.ScanTokens();
-
-        // For now, just print the tokens.
-        foreach (var token in tokens)
+        try
         {
-            Console.WriteLine(token);
+            var scanner = new Scanner(source);
+            var tokens = scanner.ScanTokens();
+            var parser = new Parser(tokens);
+            var statements = parser.Parse();
+
+            if (hadError) return;
+
+            var interpreter = new Interpreter();
+
+            if (hadError) return;
+
+            // temp code
+            interpreter.Interpret(statements);
         }
+        catch (Exception)
+        {
+            //throw;
+        }
+        
     }
 
     public static void Error(int line, string message)

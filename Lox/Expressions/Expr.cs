@@ -13,7 +13,9 @@ public interface IVisitor<T>
     T Visit(Grouping expr);
     T Visit(Literal expr);
     T Visit(Unary expr);
+    T Visit(Variable expr);
 }
+
 public abstract class Expr
 {
     public abstract T Accept<T>(IVisitor<T> visitor);
@@ -71,4 +73,20 @@ public class Unary : Expr
     {
         return visitor.Visit(this);
     }
+}
+
+public class Variable : Expr
+{
+    public Token Name { get; init; }
+
+    public Variable(Token name) 
+    {
+        Name = name;
+    }
+
+    public override T Accept<T>(IVisitor<T> visitor)
+    {
+        return visitor.Visit(this);
+    }
+    
 }

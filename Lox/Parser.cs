@@ -1,4 +1,6 @@
-﻿using LoxInterpreter.Expressions;
+﻿using LoxInterpreter.Exceptions;
+using LoxInterpreter.Expressions;
+using LoxInterpreter.Statements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +20,7 @@ public class Parser
         this.tokens = tokens;
     }
 
-    public Expr Parse()
+    public Expr ParseExpression()
     {
         try
         {
@@ -27,8 +29,68 @@ public class Parser
         catch (Exception ex)
         {
             return null;
-            throw;
         }
+    }
+
+    public List<Stmt> Parse()
+    {
+        var statements = new List<Stmt>();
+        while (!AtEnd)
+        {
+            var stmt = Declaration();
+            if (stmt != null)
+                statements.Add(stmt);
+        }
+
+        return statements;
+    }
+
+    private Stmt? Declaration()
+    {
+        try
+        {
+            if (Match(TokenType.VAR))
+                return VarDeclaration();
+
+            return Statement();
+        }
+        catch (ParseException)
+        {
+            Synchronize();
+            return null;
+        }
+    }
+
+    private Stmt VarDeclaration()
+    {
+        Token name = Consume(TokenType.IDENTIFIER, "Expect variable name.");
+        Expr? initializer = null;
+
+        if (Match(TokenType.EQUAL))
+            initializer = Expression();
+
+        Consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.");
+        return new Statements.Var(name, initializer);
+    }
+
+    private Stmt Statement()
+    {
+        if (Match(TokenType.PRINT)) return PrintStatement();
+
+        return ExpressionStatement();
+    }
+    private Stmt PrintStatement()
+    {
+        Expr value = Expression();
+        Consume(TokenType.SEMICOLON, "Expect ';' after value.");
+        return new Statements.Print(value);
+    }
+
+    private Stmt ExpressionStatement()
+    {
+        Expr value = Expression();
+        Consume(TokenType.SEMICOLON, "Expect ';' after expression.");
+        return new Statements.Expression(value);
     }
 
     private Expr Expression()
@@ -143,6 +205,8 @@ public class Parser
         if (Match(TokenType.TRUE)) return new Literal { Value = true };
         if (Match(TokenType.NIL)) return new Literal { Value = null };
         if (Match(TokenType.NUMBER, TokenType.STRING)) return new Literal { Value = Previous().Literal };
+        if (Match(TokenType.IDENTIFIER)) return new Expressions.Variable(Previous());
+
         if (Match(TokenType.LEFT_PAREN))
         {
             var expr = Expression();
@@ -153,18 +217,18 @@ public class Parser
         throw Error(Peek(), "Expression Expected");
     }
 
-    private Token Consume(TokenType type, string messgge)
+    private Token Consume(TokenType type, string message)
     {
         if (Check(type)) return Advance();
 
-        throw Error(Peek(), messgge);
+        throw Error(Peek(), message);
     }
 
     private Exception Error(Token token, string message)
     {
         Lox.Error(token, message);
 
-        throw new ApplicationException(message);
+        throw new ParseException(message);
     }
 
     private void Synchronize()

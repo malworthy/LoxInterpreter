@@ -36,6 +36,11 @@ public class AstPrinter : IVisitor<string>
         return Parenthesize(expr.Operator.Lexme, expr.Right);
     }
 
+    public string Visit(Variable expr)
+    {
+        throw new NotImplementedException();
+    }
+
     private String Parenthesize(String name, params Expr[] exprs)
     {
         StringBuilder builder = new StringBuilder();
