@@ -10,7 +10,7 @@ public interface IVisitor<T>
 {
     T Visit(Expression expr);
     T Visit(Print expr);
-    T Visit(Var variable);
+    T Visit(Var stmt);
 }
 public abstract class Stmt
 {

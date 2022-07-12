@@ -26,6 +26,12 @@ public class Assign : Expr
     public Token Name { get; init; }
     public Expr Value { get; init; }
 
+    public Assign(Token name, Expr value)
+    {
+        Name = name;
+        Value = value;  
+    }
+
     public override T Accept<T>(IVisitor<T> visitor)
     {
         return visitor.Visit(this);

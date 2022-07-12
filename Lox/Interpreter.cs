@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace LoxInterpreter;
 public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bool>
 {
+    private readonly Environment environment = new();
     public string Interpret(Expr expr)
     {
         try
@@ -47,7 +48,9 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
 
     public object? Visit(Assign expr)
     {
-        throw new NotImplementedException();
+        var value = Evaluate(expr.Value);
+        environment.Assign(expr.Name, value);
+        return value;
     }
 
     public object? Visit(Binary expr)
@@ -179,13 +182,18 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
         return true;
     }
 
-    public bool Visit(Var variable)
+    public bool Visit(Var stmt)
     {
-        throw new NotImplementedException();
+        object? value = null;
+        if (stmt.Initializer != null)
+            value = Evaluate(stmt.Initializer);
+
+        environment.Define(stmt.Name.Lexme, value);
+        return true;
     }
 
     public object? Visit(Variable expr)
     {
-        throw new NotImplementedException();
+        return environment.Get(expr.Name);
     }
 }
