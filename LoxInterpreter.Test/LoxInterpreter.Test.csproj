@@ -10,10 +10,14 @@
 
   <ItemGroup>
     <None Remove="TestPrograms\BlockScope.txt" />
+    <None Remove="TestPrograms\ConditionalExecution.txt" />
+    <None Remove="TestPrograms\ConditionalExecutionER.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="TestPrograms\BlockScope.txt" />
+    <EmbeddedResource Include="TestPrograms\ConditionalExecution.txt" />
+    <EmbeddedResource Include="TestPrograms\ConditionalExecutionER.txt" />
   </ItemGroup>
 
   <ItemGroup>

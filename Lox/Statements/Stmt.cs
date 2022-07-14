@@ -6,13 +6,6 @@ using System.Threading.Tasks;
 
 namespace LoxInterpreter.Statements;
 
-public interface IVisitor<T>
-{
-    T Visit(Expression expr);
-    T Visit(Print expr);
-    T Visit(Var stmt);
-    T Visit(Block stmt);
-}
 public abstract class Stmt
 {
     public abstract T Accept<T>(IVisitor<T> visitor);

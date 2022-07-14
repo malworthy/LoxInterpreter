@@ -37,4 +37,33 @@ public class InterpreterTests
         new Interpreter(output).Interpret(statements);
         //Assert.Equal("2", output.Text.Trim());
     }
+
+    [Fact]
+    public void TestConditionalExecution()
+    {
+        var prog = GetFileContents("ConditionalExecution.txt");
+        var result = InterpreteGetOutout(prog);
+        var expected = GetFileContents("ConditionalExecutionER.txt");
+        Assert.Equal(expected, result);
+    }
+
+    private string GetFileContents(string filename)
+    {
+        var a = Assembly.GetExecutingAssembly();
+        var s = a.GetManifestResourceStream($"LoxInterpreter.Test.TestPrograms.{filename}");
+        using var sr = new StreamReader(s);
+        return sr.ReadToEnd();
+    }
+
+    private string InterpreteGetOutout(string program)
+    {
+        var scanner = new Scanner(program);
+        var tokens = scanner.ScanTokens();
+        var parser = new Parser(tokens);
+        var statements = parser.Parse();
+        var output = new TestOutput();
+        new Interpreter(output).Interpret(statements);
+        return output.Text;
+    }
+
 }

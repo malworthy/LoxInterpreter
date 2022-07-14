@@ -222,4 +222,30 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
             this.environment = previous;
         }
     }
+
+    public bool Visit(If stmt)
+    {
+        if (IsTruthy(Evaluate(stmt.Condition)))
+            Execute(stmt.ThenBranch);
+        else if (stmt.ElseBranch != null)
+            Execute(stmt.ElseBranch);
+
+        return true;
+    }
+
+    public object? Visit(Logical expr)
+    {
+        var left = Evaluate(expr.Left);
+
+        if (expr.Operator.Type == TokenType.OR)
+        {
+            if (IsTruthy(left)) return left;
+        }
+        else
+        {
+            if (!IsTruthy(left)) return left;
+        }
+
+        return Evaluate(expr.Right);
+    }
 }

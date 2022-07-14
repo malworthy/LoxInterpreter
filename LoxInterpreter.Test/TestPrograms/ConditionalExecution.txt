@@ -1,0 +1,10 @@
+﻿if (1==2)
+	print "one";
+else
+	print "two";
+
+if (1==1)
+	print "three";
+
+if (1==2)
+	print "four";
