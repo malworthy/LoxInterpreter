@@ -10,7 +10,13 @@ using System.Threading.Tasks;
 namespace LoxInterpreter;
 public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bool>
 {
-    private readonly Environment environment = new();
+    private Environment environment = new();
+    private readonly IOutput output;
+
+    public Interpreter(IOutput output)
+    {
+        this.output = output;
+    }
     public string Interpret(Expr expr)
     {
         try
@@ -178,7 +184,7 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
     public bool Visit(Print expr)
     {
         var value = Evaluate(expr.expression);
-        Console.WriteLine(value);
+        output.Print(value);
         return true;
     }
 
@@ -195,5 +201,25 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
     public object? Visit(Variable expr)
     {
         return environment.Get(expr.Name);
+    }
+
+    public bool Visit(Block stmt)
+    {
+        ExecuteBlock(stmt.Statements, new Environment(environment));
+        return true;
+    }
+
+    private void ExecuteBlock(IEnumerable<Stmt> statements, Environment environment)
+    {
+        var previous = this.environment;
+        try
+        {
+            this.environment = environment;
+            statements.ToList().ForEach(x => Execute(x));
+        }
+        finally
+        {
+            this.environment = previous;
+        }
     }
 }

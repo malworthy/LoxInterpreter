@@ -11,7 +11,7 @@ namespace LoxInterpreter;
 public class Lox
 {
     static bool hadError = false;
-    private static readonly Interpreter interpreter = new();
+    private static readonly Interpreter interpreter = new(new Output());
 
     public static int Start(string[] args)
     {

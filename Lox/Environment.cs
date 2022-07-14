@@ -40,8 +40,17 @@ public class Environment
     public void Assign(Token name, object? value)
     {
         if (values.ContainsKey(name.Lexme))
+        {
             values[name.Lexme] = value;
-        else
-            throw new RuntimeException(name, $"Variable '{name.Lexme}' not defined");
+            return;
+        }
+
+        if (enclosing != null)
+        {
+            enclosing.Assign(name, value);
+            return;
+        }
+
+        throw new RuntimeException(name, $"Variable '{name.Lexme}' not defined");
     }
 }

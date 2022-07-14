@@ -11,6 +11,7 @@ public interface IVisitor<T>
     T Visit(Expression expr);
     T Visit(Print expr);
     T Visit(Var stmt);
+    T Visit(Block stmt);
 }
 public abstract class Stmt
 {
