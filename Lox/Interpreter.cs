@@ -248,4 +248,11 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
 
         return Evaluate(expr.Right);
     }
+
+    public bool Visit(While stmt)
+    {
+        while (IsTruthy(Evaluate(stmt.Condition)))
+            Execute(stmt.Body);
+        return true;
+    }
 }

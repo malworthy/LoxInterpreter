@@ -12,12 +12,18 @@
     <None Remove="TestPrograms\BlockScope.txt" />
     <None Remove="TestPrograms\ConditionalExecution.txt" />
     <None Remove="TestPrograms\ConditionalExecutionER.txt" />
+    <None Remove="TestPrograms\For.txt" />
+    <None Remove="TestPrograms\While.txt" />
+    <None Remove="TestPrograms\WhileER.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="TestPrograms\BlockScope.txt" />
     <EmbeddedResource Include="TestPrograms\ConditionalExecution.txt" />
     <EmbeddedResource Include="TestPrograms\ConditionalExecutionER.txt" />
+    <EmbeddedResource Include="TestPrograms\For.txt" />
+    <EmbeddedResource Include="TestPrograms\While.txt" />
+    <EmbeddedResource Include="TestPrograms\WhileER.txt" />
   </ItemGroup>
 
   <ItemGroup>

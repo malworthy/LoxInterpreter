@@ -75,11 +75,63 @@ public class Parser
 
     private Stmt Statement()
     {
+        if (Match(TokenType.FOR)) return ForStatement();
         if (Match(TokenType.IF)) return IfStatement();
         if (Match(TokenType.PRINT)) return PrintStatement();
+        if (Match(TokenType.WHILE)) return WhileStatement();
         if (Match(TokenType.LEFT_BRACE)) return new Block(GetBlock());
 
         return ExpressionStatement();
+    }
+
+    private Stmt ForStatement()
+    {
+        Consume(TokenType.LEFT_PAREN, "Expect '(' after 'for'.");
+
+        Stmt? initializer;
+        if (Match(TokenType.SEMICOLON))
+            initializer = null;
+        else if (Match(TokenType.VAR))
+            initializer = VarDeclaration();
+        else
+            initializer = ExpressionStatement();
+
+        Expr? condition = null;
+        if (!Check(TokenType.SEMICOLON))
+            condition = Expression();
+        Consume(TokenType.SEMICOLON, "; missing");
+
+        Expr? increment = null;
+        if (!Check(TokenType.RIGHT_PAREN))
+            increment = Expression();
+        Consume(TokenType.RIGHT_PAREN, "Expect ')' after for clauses.");
+
+        var body = Statement();
+
+        if (increment != null)
+        {
+            body = new Block(new List<Stmt> { body, new Expression(increment) });
+        }
+
+        if (condition == null) condition = new Literal(true);
+        body = new While(condition, body);
+
+        if (initializer != null)
+        {
+            body = new Block(new List<Stmt> { initializer, body });
+        }
+
+        return body;
+
+    }
+
+    private Stmt WhileStatement()
+    {
+        Consume(TokenType.LEFT_PAREN, "Missing '(' after 'while'");
+        var condition = Expression();
+        Consume(TokenType.RIGHT_PAREN, "Missing ')' after condition");
+        var body = Statement();
+        return new Statements.While(condition, body);
     }
 
     private Stmt IfStatement()
@@ -278,10 +330,10 @@ public class Parser
 
     private Expr Primary()
     {
-        if (Match(TokenType.FALSE)) return new Literal { Value = false };
-        if (Match(TokenType.TRUE)) return new Literal { Value = true };
-        if (Match(TokenType.NIL)) return new Literal { Value = null };
-        if (Match(TokenType.NUMBER, TokenType.STRING)) return new Literal { Value = Previous().Literal };
+        if (Match(TokenType.FALSE)) return new Literal(false);
+        if (Match(TokenType.TRUE)) return new Literal(true);
+        if (Match(TokenType.NIL)) return new Literal(null);
+        if (Match(TokenType.NUMBER, TokenType.STRING)) return new Literal(Previous().Literal);
         if (Match(TokenType.IDENTIFIER)) return new Expressions.Variable(Previous());
 
         if (Match(TokenType.LEFT_PAREN))

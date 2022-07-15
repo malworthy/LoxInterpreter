@@ -25,10 +25,10 @@ public class ScannerTests
             Left = new Unary 
             { 
                 Operator = new Token { Type = TokenType.MINUS, Lexme = "-" }, 
-                Right = new Literal { Value = 123 }
+                Right = new Literal(123)
             },
             Operator = new Token { Type = TokenType.STAR, Lexme = "*" },
-            Right = new Grouping { Expression = new Literal { Value = 45.67 } }
+            Right = new Grouping { Expression = new Literal(45.67) }
         };
 
         var result = new AstPrinter().Print(expression);

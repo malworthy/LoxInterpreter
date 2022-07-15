@@ -47,6 +47,17 @@ public class InterpreterTests
         Assert.Equal(expected, result);
     }
 
+    [Theory]
+    [InlineData("While.txt","WhileER.txt")]
+    [InlineData("For.txt", "WhileER.txt")]
+    public void TestWhile(string programFile, string expectedResultFile)
+    {
+        var prog = GetFileContents(programFile);
+        var result = InterpreteGetOutout(prog);
+        var expected = GetFileContents(expectedResultFile);
+        Assert.Equal(expected, result);
+    }
+
     private string GetFileContents(string filename)
     {
         var a = Assembly.GetExecutingAssembly();

@@ -12,4 +12,5 @@ public interface IVisitor<T>
     T Visit(Var stmt);
     T Visit(Block stmt);
     T Visit(If stmt);
+    T Visit(While stmt);
 }
