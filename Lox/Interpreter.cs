@@ -1,5 +1,6 @@
 ﻿using LoxInterpreter.Exceptions;
 using LoxInterpreter.Expressions;
+using LoxInterpreter.NativeFunctions;
 using LoxInterpreter.Statements;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,16 @@ using System.Threading.Tasks;
 namespace LoxInterpreter;
 public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bool>
 {
-    private Environment environment = new();
+    public readonly Environment globals = new();
+    private Environment environment;
     private readonly IOutput output;
 
     public Interpreter(IOutput output)
     {
         this.output = output;
+        environment = globals;
+
+        globals.Define("clock", new Clock());
     }
     public string Interpret(Expr expr)
     {
@@ -209,7 +214,7 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
         return true;
     }
 
-    private void ExecuteBlock(IEnumerable<Stmt> statements, Environment environment)
+    public void ExecuteBlock(IEnumerable<Stmt> statements, Environment environment)
     {
         var previous = this.environment;
         try
@@ -253,6 +258,30 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
     {
         while (IsTruthy(Evaluate(stmt.Condition)))
             Execute(stmt.Body);
+        return true;
+    }
+
+    public object? Visit(Call expr)
+    {
+        var callee = Evaluate(expr.Callee);
+        var arguments = expr.Arguments.Select(x => Evaluate(x)).ToList();
+
+        var function = callee as ICallable;
+
+        if (function == null)
+            throw new RuntimeException(expr.Paran, "Can only call functions and classes.");
+
+        if (arguments.Count != function.Arity)
+            throw new RuntimeException(expr.Paran, "Incorrect number of arguments.");
+
+        return function?.Call(this, arguments);
+
+    }
+
+    public bool Visit(Function stmt)
+    {
+        var function = new LoxFunction(stmt);
+        environment.Define(stmt.Name.Lexme, function);
         return true;
     }
 }

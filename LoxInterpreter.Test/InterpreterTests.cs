@@ -11,13 +11,13 @@ public class InterpreterTests
     [Fact]
     public void Test()
     {
-        var scanner = new Scanner("print 1+1;");
+        var scanner = new Scanner("print clock();");
         var tokens = scanner.ScanTokens();
         var parser = new Parser(tokens);
         var statements = parser.Parse();
         var output = new TestOutput();
         new Interpreter(output).Interpret(statements);
-        Assert.Equal("2", output.Text.Trim());
+        //Assert.Equal("2", output.Text.Trim());
     }
 
     [Fact]
@@ -56,6 +56,15 @@ public class InterpreterTests
         var result = InterpreteGetOutout(prog);
         var expected = GetFileContents(expectedResultFile);
         Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData("Functions.txt","Hi, Dear Reader!")]
+    public void TestFunctionCalls(string programFile, string expected)
+    {
+        var prog = GetFileContents(programFile);
+        var result = InterpreteGetOutout(prog);
+        Assert.Equal(expected, result.Trim());
     }
 
     private string GetFileContents(string filename)

@@ -13,6 +13,7 @@
     <None Remove="TestPrograms\ConditionalExecution.txt" />
     <None Remove="TestPrograms\ConditionalExecutionER.txt" />
     <None Remove="TestPrograms\For.txt" />
+    <None Remove="TestPrograms\Functions.txt" />
     <None Remove="TestPrograms\While.txt" />
     <None Remove="TestPrograms\WhileER.txt" />
   </ItemGroup>
@@ -22,6 +23,7 @@
     <EmbeddedResource Include="TestPrograms\ConditionalExecution.txt" />
     <EmbeddedResource Include="TestPrograms\ConditionalExecutionER.txt" />
     <EmbeddedResource Include="TestPrograms\For.txt" />
+    <EmbeddedResource Include="TestPrograms\Functions.txt" />
     <EmbeddedResource Include="TestPrograms\While.txt" />
     <EmbeddedResource Include="TestPrograms\WhileER.txt" />
   </ItemGroup>

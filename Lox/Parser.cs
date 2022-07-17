@@ -49,6 +49,8 @@ public class Parser
     {
         try
         {
+            if (Match(TokenType.FUN))
+                return Function("function");
             if (Match(TokenType.VAR))
                 return VarDeclaration();
 
@@ -61,9 +63,29 @@ public class Parser
         }
     }
 
+    private Stmt? Function(string kind)
+    {
+        var name = Consume(TokenType.IDENTIFIER, $"Expect {kind} name.");
+        Consume(TokenType.LEFT_PAREN, $"Missing '(' after {kind}.");
+        var parameters = new List<Token>();
+        if (!Check(TokenType.RIGHT_PAREN))
+        {
+            do
+            {
+                if (parameters.Count > 255)
+                    Error(Peek(), "A cannot have more than 255 parameters");
+                parameters.Add(Consume(TokenType.IDENTIFIER,"Expect parameter name"));
+            } while (Match(TokenType.COMMA));
+        }
+        Consume(TokenType.RIGHT_PAREN, "Missing ')'");
+        Consume(TokenType.LEFT_BRACE, $"Missing '{{' at start of {kind} body. ");
+        var body = GetBlock();
+        return new Statements.Function(name, parameters, body);
+    }
+
     private Stmt VarDeclaration()
     {
-        Token name = Consume(TokenType.IDENTIFIER, "Expect variable name.");
+        var name = Consume(TokenType.IDENTIFIER, "Expect variable name.");
         Expr? initializer = null;
 
         if (Match(TokenType.EQUAL))
@@ -325,7 +347,40 @@ public class Parser
             var right = this.Unary();
             return new Unary { Operator = oper, Right = right };
         }
-        return Primary();
+        return Call();
+    }
+
+    private Expr Call()
+    {
+        var expr = Primary();
+        while (true)
+        {
+            if (Match(TokenType.LEFT_PAREN))
+                expr = FinishCall(expr);
+            else
+                break;
+        }
+
+        //while (Match(TokenType.LEFT_BRACE))
+        //    expr = FinishCall(expr);
+
+        return expr;
+    }
+
+    private Expr FinishCall(Expr callee)
+    {
+        var arguments = new List<Expr>();
+        if (!Check(TokenType.RIGHT_PAREN))
+        {
+            do
+            {
+                if (arguments.Count > 255)
+                    Error(Peek(), "A function cannot have more than 255 arguments");
+                arguments.Add(Expression());
+            } while (Match(TokenType.COMMA));
+        }
+        var paran = Consume(TokenType.RIGHT_PAREN, "Missing ')'");
+        return new Expressions.Call(callee, paran, arguments);
     }
 
     private Expr Primary()

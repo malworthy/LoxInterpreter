@@ -15,6 +15,7 @@ public interface IVisitor<T>
     T Visit(Unary expr);
     T Visit(Variable expr);
     T Visit(Logical expr);
+    T Visit(Call expr);
 }
 
 public abstract class Expr
