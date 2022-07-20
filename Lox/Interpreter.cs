@@ -280,8 +280,14 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
 
     public bool Visit(Function stmt)
     {
-        var function = new LoxFunction(stmt);
+        var function = new LoxFunction(stmt, environment);
         environment.Define(stmt.Name.Lexme, function);
         return true;
+    }
+
+    public bool Visit(Return stmt)
+    {
+        var value = stmt.Value != null ? Evaluate(stmt.Value) : null;
+        throw new Exceptions.ReturnException(value);
     }
 }

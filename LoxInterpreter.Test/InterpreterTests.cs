@@ -50,7 +50,9 @@ public class InterpreterTests
     [Theory]
     [InlineData("While.txt","WhileER.txt")]
     [InlineData("For.txt", "WhileER.txt")]
-    public void TestWhile(string programFile, string expectedResultFile)
+    [InlineData("RecursiveFunction.txt", "RecursiveFunctionER.txt")]
+    //[InlineData("AnonFunction.txt", "AnonFunctionER.txt")]
+    public void TestLooping(string programFile, string expectedResultFile)
     {
         var prog = GetFileContents(programFile);
         var result = InterpreteGetOutout(prog);
@@ -60,7 +62,7 @@ public class InterpreterTests
 
     [Theory]
     [InlineData("Functions.txt","Hi, Dear Reader!")]
-    public void TestFunctionCalls(string programFile, string expected)
+    public void TestFunctions(string programFile, string expected)
     {
         var prog = GetFileContents(programFile);
         var result = InterpreteGetOutout(prog);

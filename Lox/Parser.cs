@@ -100,10 +100,20 @@ public class Parser
         if (Match(TokenType.FOR)) return ForStatement();
         if (Match(TokenType.IF)) return IfStatement();
         if (Match(TokenType.PRINT)) return PrintStatement();
+        if (Match(TokenType.RETURN)) return ReturnStatement();
         if (Match(TokenType.WHILE)) return WhileStatement();
         if (Match(TokenType.LEFT_BRACE)) return new Block(GetBlock());
 
         return ExpressionStatement();
+    }
+
+    private Stmt ReturnStatement()
+    {
+        var keyword = Previous();
+        var value = !Check(TokenType.SEMICOLON) ? Expression() : null;
+
+        Consume(TokenType.SEMICOLON, "Expect ';' after return value.");
+        return new Statements.Return(keyword, value);
     }
 
     private Stmt ForStatement()

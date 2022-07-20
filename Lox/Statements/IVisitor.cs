@@ -14,4 +14,5 @@ public interface IVisitor<T>
     T Visit(If stmt);
     T Visit(While stmt);
     T Visit(Function stmt);
+    T Visit(Return stmt);
 }
