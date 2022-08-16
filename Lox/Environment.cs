@@ -53,4 +53,28 @@ public class Environment
 
         throw new RuntimeException(name, $"Variable '{name.Lexme}' not defined");
     }
+
+    internal object? GetAt(int distance, string name)
+    {
+        var ans = Ancestor(distance);
+
+        return ans.values[name];
+    }
+
+    private Environment Ancestor(int distance)
+    {
+        var env = this;
+
+        for(int i = 0; i < distance; i++)
+        {
+            env = env.enclosing;
+        }
+
+        return env;
+    }
+
+    internal void AssignAt(int distance, Token name, object? value)
+    {
+        Ancestor(distance).values[name.Lexme] = value;
+    }
 }

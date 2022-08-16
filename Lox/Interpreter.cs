@@ -14,6 +14,7 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
     public readonly Environment globals = new();
     private Environment environment;
     private readonly IOutput output;
+    private readonly Dictionary<Expr, int> locals = new();
 
     public Interpreter(IOutput output)
     {
@@ -60,8 +61,23 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
     public object? Visit(Assign expr)
     {
         var value = Evaluate(expr.Value);
-        environment.Assign(expr.Name, value);
+
+        if (locals.ContainsKey(expr))
+        {
+            var distance = locals[expr];
+            environment.AssignAt(distance, expr.Name, value);
+        }
+        else
+        {
+            globals.Assign(expr.Name, value);
+        }
+        
         return value;
+    }
+
+    internal void Resolve(Expr expr, int depth)
+    {
+        locals[expr] = depth;
     }
 
     public object? Visit(Binary expr)
@@ -205,7 +221,21 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
 
     public object? Visit(Variable expr)
     {
-        return environment.Get(expr.Name);
+        return LookUpVariable(expr.Name, expr); // environment.Get(expr.Name);
+    }
+
+    private object? LookUpVariable(Token name, Expr expr)
+    {
+        if (locals.ContainsKey(expr))
+        {
+            var distance = locals[expr];
+            return environment.GetAt(distance, name.Lexme);
+        }
+        else
+        {
+            return globals.Get(name);
+        }
+        
     }
 
     public bool Visit(Block stmt)

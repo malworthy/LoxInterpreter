@@ -66,6 +66,11 @@ public class Parser
     private Stmt? Function(string kind)
     {
         var name = Consume(TokenType.IDENTIFIER, $"Expect {kind} name.");
+
+        // for anonomous functions???
+        //var name = Check(TokenType.IDENTIFIER) ? Consume(TokenType.IDENTIFIER, $"Expect {kind} name.") :
+        //    new Token { Type = TokenType.IDENTIFIER, Lexme = Guid.NewGuid().ToString()};
+
         Consume(TokenType.LEFT_PAREN, $"Missing '(' after {kind}.");
         var parameters = new List<Token>();
         if (!Check(TokenType.RIGHT_PAREN))
@@ -89,7 +94,12 @@ public class Parser
         Expr? initializer = null;
 
         if (Match(TokenType.EQUAL))
+        {
+            //if (Match(TokenType.FUN))
+            //    initializer = Function("function");
             initializer = Expression();
+        }
+            
 
         Consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.");
         return new Statements.Var(name, initializer);

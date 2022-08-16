@@ -68,9 +68,8 @@ public class Lox
 
             if (hadError) return;
 
-            //var interpreter = new Interpreter();
-
-            if (hadError) return;
+            var resolver = new Resolver(interpreter);
+            resolver.Resolve(statements);
 
             // temp code
             interpreter.Interpret(statements);

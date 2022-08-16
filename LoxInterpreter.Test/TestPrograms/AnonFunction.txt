@@ -8,4 +8,6 @@
 //  print a;
 //});
 
-var x = fun(a) {print a};
+//var x = fun(a) {print a};
+
+fun (a) { print a;};

@@ -51,7 +51,6 @@ public class InterpreterTests
     [InlineData("While.txt","WhileER.txt")]
     [InlineData("For.txt", "WhileER.txt")]
     [InlineData("RecursiveFunction.txt", "RecursiveFunctionER.txt")]
-    //[InlineData("AnonFunction.txt", "AnonFunctionER.txt")]
     public void TestLooping(string programFile, string expectedResultFile)
     {
         var prog = GetFileContents(programFile);
@@ -79,12 +78,19 @@ public class InterpreterTests
 
     private string InterpreteGetOutout(string program)
     {
+        var output = new TestOutput();
+        var interpreter = new Interpreter(output);
+
         var scanner = new Scanner(program);
         var tokens = scanner.ScanTokens();
         var parser = new Parser(tokens);
         var statements = parser.Parse();
-        var output = new TestOutput();
-        new Interpreter(output).Interpret(statements);
+        
+        var resolver = new Resolver(interpreter);
+        resolver.Resolve(statements);
+
+        interpreter.Interpret(statements);
+
         return output.Text;
     }
 
