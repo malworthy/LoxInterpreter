@@ -11,6 +11,13 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
 {
     private readonly Interpreter interpreter;
     private readonly Stack<Dictionary<string, bool>> scopes = new();
+    private FunctionType currentFunction = FunctionType.None;
+
+    private enum FunctionType
+    {
+        None,
+        Function
+    }
 
     public Resolver(Interpreter interpreter) 
     {
@@ -52,12 +59,10 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
         return true;
     }
 
-
-
     private void ResolveLocal(Expr expr, Token name)
     {
         int i = 0;
-        foreach(var scope in scopes/*.Reverse()*/)
+        foreach(var scope in scopes)
         {
             if(scope.ContainsKey(name.Lexme))
             {
@@ -66,15 +71,6 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
             }
             i++;
         }
-
-        /*for (int i = scopes.Count - 1; i >= 0; i--)
-        {
-            if (scopes.ToArray()[i].ContainsKey(name.Lexme))
-            {
-                interpreter.Resolve(expr, scopes.Count - 1 - i);
-                return;
-            }
-        }*/
     }
 
     public bool Visit(Logical expr)
@@ -129,6 +125,9 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
     {
         if (!scopes.Any()) return;
         var scope = scopes.Peek();
+        if (scope.ContainsKey(name.Lexme))
+            Lox.Error(name, "A variable already exists in this scope.");
+
         scope[name.Lexme] = false;
     }
 
@@ -182,7 +181,7 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
     {
         Declare(stmt.Name);
         Define(stmt.Name);
-        ResolveFunction(stmt);
+        ResolveFunction(stmt, FunctionType.Function);
 
         return true;
     }
@@ -200,8 +199,11 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
         return true;
     }
 
-    private void ResolveFunction(Function function)
+    private void ResolveFunction(Function function, FunctionType type)
     {
+        var enclosingFunction = currentFunction;
+        currentFunction = type;
+
         BeginScope();
         foreach(var param in function.Parameters)
         {
@@ -210,10 +212,14 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
         }
         Resolve(function.Body);
         EndScope();
+        currentFunction = enclosingFunction;
     }
 
     public bool Visit(Return stmt)
     {
+        if (currentFunction == FunctionType.None)
+            Lox.Error(stmt.Keyword, "Can't return from top level code");
+
         if (stmt.Value != null)
             Resolve(stmt.Value);
 

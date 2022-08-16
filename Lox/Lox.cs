@@ -71,6 +71,8 @@ public class Lox
             var resolver = new Resolver(interpreter);
             resolver.Resolve(statements);
 
+            if (hadError) return;
+
             // temp code
             interpreter.Interpret(statements);
         }
