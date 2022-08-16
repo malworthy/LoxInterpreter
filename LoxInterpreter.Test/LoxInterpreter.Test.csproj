@@ -12,6 +12,8 @@
     <None Remove="TestPrograms\AnonFunction.txt" />
     <None Remove="TestPrograms\AnonFunctionER.txt" />
     <None Remove="TestPrograms\BlockScope.txt" />
+    <None Remove="TestPrograms\BlockScope2.txt" />
+    <None Remove="TestPrograms\BlockScope2ER.txt" />
     <None Remove="TestPrograms\ConditionalExecution.txt" />
     <None Remove="TestPrograms\ConditionalExecutionER.txt" />
     <None Remove="TestPrograms\For.txt" />
@@ -24,6 +26,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="TestPrograms\AnonFunction.txt" />
+    <EmbeddedResource Include="TestPrograms\BlockScope2.txt" />
+    <EmbeddedResource Include="TestPrograms\BlockScope2ER.txt" />
     <EmbeddedResource Include="TestPrograms\AnonFunctionER.txt" />
     <EmbeddedResource Include="TestPrograms\BlockScope.txt" />
     <EmbeddedResource Include="TestPrograms\ConditionalExecution.txt" />

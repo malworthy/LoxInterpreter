@@ -51,6 +51,7 @@ public class InterpreterTests
     [InlineData("While.txt","WhileER.txt")]
     [InlineData("For.txt", "WhileER.txt")]
     [InlineData("RecursiveFunction.txt", "RecursiveFunctionER.txt")]
+    [InlineData("BlockScope2.txt","BlockScope2ER.txt")]
     public void TestLooping(string programFile, string expectedResultFile)
     {
         var prog = GetFileContents(programFile);
