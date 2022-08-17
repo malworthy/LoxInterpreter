@@ -96,7 +96,7 @@ public class Lox
         }
         else
         {
-            Report(token.Line, $" at '{token.Lexme}'", message);
+            Report(token.Line, $" at '{token.Lexeme}'", message);
         }
     }
 

@@ -64,7 +64,7 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
         int i = 0;
         foreach(var scope in scopes)
         {
-            if(scope.ContainsKey(name.Lexme))
+            if(scope.ContainsKey(name.Lexeme))
             {
                 interpreter.Resolve(expr, i);
                 return;
@@ -118,17 +118,17 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
     {
         if (!scopes.Any()) return;
         var scope = scopes.Peek();
-        scope[name.Lexme] = true;
+        scope[name.Lexeme] = true;
     }
 
     private void Declare(Token name)
     {
         if (!scopes.Any()) return;
         var scope = scopes.Peek();
-        if (scope.ContainsKey(name.Lexme))
+        if (scope.ContainsKey(name.Lexeme))
             Lox.Error(name, "A variable already exists in this scope.");
 
-        scope[name.Lexme] = false;
+        scope[name.Lexeme] = false;
     }
 
     public bool Visit(Block stmt)
@@ -189,8 +189,8 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
     public bool Visit(Variable expr)
     {
         if (scopes.Any() 
-            && scopes.Peek().ContainsKey(expr.Name.Lexme) 
-            && scopes.Peek()[expr.Name.Lexme] == false)
+            && scopes.Peek().ContainsKey(expr.Name.Lexeme) 
+            && scopes.Peek()[expr.Name.Lexeme] == false)
             Lox.Error(expr.Name, "Can't read local variable in its own initializer.");
         
         //throw new ApplicationException("WFT!!");

@@ -215,7 +215,7 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
         if (stmt.Initializer != null)
             value = Evaluate(stmt.Initializer);
 
-        environment.Define(stmt.Name.Lexme, value);
+        environment.Define(stmt.Name.Lexeme, value);
         return true;
     }
 
@@ -229,7 +229,7 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
         if (locals.ContainsKey(expr))
         {
             var distance = locals[expr];
-            return environment.GetAt(distance, name.Lexme);
+            return environment.GetAt(distance, name.Lexeme);
         }
         else
         {
@@ -311,7 +311,7 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
     public bool Visit(Function stmt)
     {
         var function = new LoxFunction(stmt, environment);
-        environment.Define(stmt.Name.Lexme, function);
+        environment.Define(stmt.Name.Lexeme, function);
         return true;
     }
 
@@ -323,9 +323,9 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
 
     public bool Visit(Class stmt)
     {
-        environment.Define(stmt.Name.Lexme, null);
+        environment.Define(stmt.Name.Lexeme, null);
         
-        var cls = new LoxClass(stmt.Name.Lexme);
+        var cls = new LoxClass(stmt.Name.Lexeme);
         
         environment.Assign(stmt.Name, cls);
 

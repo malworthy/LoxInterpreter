@@ -24,10 +24,10 @@ public class ScannerTests
         {
             Left = new Unary 
             { 
-                Operator = new Token { Type = TokenType.MINUS, Lexme = "-" }, 
+                Operator = new Token { Type = TokenType.MINUS, Lexeme = "-" }, 
                 Right = new Literal(123)
             },
-            Operator = new Token { Type = TokenType.STAR, Lexme = "*" },
+            Operator = new Token { Type = TokenType.STAR, Lexeme = "*" },
             Right = new Grouping { Expression = new Literal(45.67) }
         };
 

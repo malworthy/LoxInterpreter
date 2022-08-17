@@ -197,6 +197,6 @@ public class Scanner
     private void AddToken(TokenType type, object? literal = null)
     {
         var text = source[start..current];
-        tokens.Add(new Token { Type = type,Lexme = text,Literal = literal, Line = line });
+        tokens.Add(new Token { Type = type,Lexeme = text,Literal = literal, Line = line });
     }
 }

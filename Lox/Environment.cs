@@ -28,20 +28,20 @@ public class Environment
 
     public object? Get(Token name)
     {
-        if (values.ContainsKey(name.Lexme))
-            return values[name.Lexme];
+        if (values.ContainsKey(name.Lexeme))
+            return values[name.Lexeme];
 
         if (enclosing != null)
             return enclosing.Get(name);
 
-        throw new RuntimeException(name, $"Variable {name.Lexme} not defined.");
+        throw new RuntimeException(name, $"Variable {name.Lexeme} not defined.");
     }
 
     public void Assign(Token name, object? value)
     {
-        if (values.ContainsKey(name.Lexme))
+        if (values.ContainsKey(name.Lexeme))
         {
-            values[name.Lexme] = value;
+            values[name.Lexeme] = value;
             return;
         }
 
@@ -51,7 +51,7 @@ public class Environment
             return;
         }
 
-        throw new RuntimeException(name, $"Variable '{name.Lexme}' not defined");
+        throw new RuntimeException(name, $"Variable '{name.Lexeme}' not defined");
     }
 
     internal object? GetAt(int distance, string name)
@@ -75,6 +75,6 @@ public class Environment
 
     internal void AssignAt(int distance, Token name, object? value)
     {
-        Ancestor(distance).values[name.Lexme] = value;
+        Ancestor(distance).values[name.Lexeme] = value;
     }
 }

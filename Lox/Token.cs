@@ -8,12 +8,12 @@ namespace LoxInterpreter;
 public record Token
 {
     public TokenType Type { get; init; }
-    public string Lexme { get; init; } = string.Empty;
+    public string Lexeme { get; init; } = string.Empty;
     public object? Literal { get; init; }
     public int Line { get; init; }
 
     public override string ToString()
     {
-        return $"{Type} {Lexme} {Literal}";
+        return $"{Type} {Lexeme} {Literal}";
     }
 }

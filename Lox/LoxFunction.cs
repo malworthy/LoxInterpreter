@@ -24,7 +24,7 @@ public class LoxFunction : ICallable
         var i = 0;
         foreach(var param in declaration.Parameters)
         {
-            environment.Define(param.Lexme, arguments[i++]);
+            environment.Define(param.Lexeme, arguments[i++]);
         }
         try
         {
