@@ -320,4 +320,15 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
         var value = stmt.Value != null ? Evaluate(stmt.Value) : null;
         throw new Exceptions.ReturnException(value);
     }
+
+    public bool Visit(Class stmt)
+    {
+        environment.Define(stmt.Name.Lexme, null);
+        
+        var cls = new LoxClass(stmt.Name.Lexme);
+        
+        environment.Assign(stmt.Name, cls);
+
+        return true;
+    }
 }

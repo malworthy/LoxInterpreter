@@ -225,4 +225,12 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
 
         return true;
     }
+
+    public bool Visit(Class stmt)
+    {
+        Declare(stmt.Name);
+        Define(stmt.Name);
+
+        return true;
+    }
 }

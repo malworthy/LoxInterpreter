@@ -14,6 +14,7 @@
     <None Remove="TestPrograms\BlockScope.txt" />
     <None Remove="TestPrograms\BlockScope2.txt" />
     <None Remove="TestPrograms\BlockScope2ER.txt" />
+    <None Remove="TestPrograms\Classes.lox" />
     <None Remove="TestPrograms\ConditionalExecution.txt" />
     <None Remove="TestPrograms\ConditionalExecutionER.txt" />
     <None Remove="TestPrograms\For.txt" />
@@ -30,6 +31,7 @@
     <EmbeddedResource Include="TestPrograms\BlockScope2ER.txt" />
     <EmbeddedResource Include="TestPrograms\AnonFunctionER.txt" />
     <EmbeddedResource Include="TestPrograms\BlockScope.txt" />
+    <EmbeddedResource Include="TestPrograms\Classes.lox" />
     <EmbeddedResource Include="TestPrograms\ConditionalExecution.txt" />
     <EmbeddedResource Include="TestPrograms\ConditionalExecutionER.txt" />
     <EmbeddedResource Include="TestPrograms\For.txt" />

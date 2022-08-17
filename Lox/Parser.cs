@@ -49,6 +49,8 @@ public class Parser
     {
         try
         {
+            if (Match(TokenType.CLASS)) 
+                return ClassDeclaration();
             if (Match(TokenType.FUN))
                 return Function("function");
             if (Match(TokenType.VAR))
@@ -63,7 +65,24 @@ public class Parser
         }
     }
 
-    private Stmt? Function(string kind)
+    private Stmt? ClassDeclaration()
+    {
+        var name = Consume(TokenType.IDENTIFIER, "Expect class name");
+
+        Consume(TokenType.LEFT_BRACE, "Missing {");
+
+        var methods = new List<Function>();
+
+        while (!Check(TokenType.RIGHT_BRACE) && !AtEnd)
+            methods.Add(Function("method"));
+
+        Consume(TokenType.RIGHT_BRACE, "Missing }");
+
+        return new Statements.Class(name, methods);
+
+    }
+
+    private Function? Function(string kind)
     {
         var name = Consume(TokenType.IDENTIFIER, $"Expect {kind} name.");
 
