@@ -55,7 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lox\LoxInterpreter.csproj" />
+    <ProjectReference Include="..\Lox\Lox.csproj" />
   </ItemGroup>
 
   <ItemGroup>

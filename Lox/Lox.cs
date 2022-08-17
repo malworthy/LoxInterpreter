@@ -87,6 +87,7 @@ public class Lox
     {
         Report(line, "", message);
     }
+
     public static void Error(Token token, String message)
     {
         if (token.Type == TokenType.EOF)
