@@ -395,13 +395,20 @@ public class Parser
         while (true)
         {
             if (Match(TokenType.LEFT_PAREN))
+            {
                 expr = FinishCall(expr);
+            }
+            else if (Match(TokenType.DOT))
+            {
+                var name = Consume(TokenType.IDENTIFIER, "Property name missing after '.'");
+                expr = new Expressions.Get(expr, name);
+            }
             else
+            {
                 break;
+            }
+                
         }
-
-        //while (Match(TokenType.LEFT_BRACE))
-        //    expr = FinishCall(expr);
 
         return expr;
     }

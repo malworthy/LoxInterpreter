@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lox", "Lox\Lox.csproj", "{4E981E50-177C-4F70-92E1-F84F57105B40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoxInterpreter", "Lox\LoxInterpreter.csproj", "{4E981E50-177C-4F70-92E1-F84F57105B40}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoxInterpreter.Test", "LoxInterpreter.Test\LoxInterpreter.Test.csproj", "{CC13146C-4844-4AFB-86AC-7ACA66F2D756}"
 EndProject

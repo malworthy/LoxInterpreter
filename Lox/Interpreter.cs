@@ -331,4 +331,13 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
 
         return true;
     }
+
+    public object? Visit(Get expr)
+    {
+        var obj = Evaluate(expr.Object) as LoxInstance;
+        if (obj != null)
+            return obj.Get(expr.Name);
+
+        throw new RuntimeException(expr.Name, "Only instances have properties");
+    }
 }

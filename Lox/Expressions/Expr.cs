@@ -13,6 +13,7 @@ public interface IVisitor<T>
     T Visit(Grouping expr);
     T Visit(Literal expr);
     T Visit(Unary expr);
+    T Visit(Get expr);
     T Visit(Variable expr);
     T Visit(Logical expr);
     T Visit(Call expr);

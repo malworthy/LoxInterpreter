@@ -233,4 +233,11 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
 
         return true;
     }
+
+    public bool Visit(Get expr)
+    {
+        Resolve(expr.Object);
+
+        return true;
+    }
 }
