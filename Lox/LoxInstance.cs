@@ -5,7 +5,7 @@ namespace LoxInterpreter;
 internal class LoxInstance
 {
     private LoxClass loxClass;
-    private readonly Dictionary<string, object> fields = new();
+    private readonly Dictionary<string, object?> fields = new();
 
     public LoxInstance(LoxClass loxClass)
     {
@@ -19,7 +19,16 @@ internal class LoxInstance
         if (fields.ContainsKey(name.Lexeme))
             return fields[name.Lexeme];
 
-        throw new RuntimeException(name, $"Undefined property {name.Lexeme} in {loxClass}");
+        var method = loxClass.FindMethod(name.Lexeme);
 
+        if (method != null)
+            return method;
+
+        throw new RuntimeException(name, $"Undefined property {name.Lexeme} in {loxClass}");
+    }
+
+    internal void Set(Token name, object? value)
+    {
+        fields[name.Lexeme] = value;
     }
 }

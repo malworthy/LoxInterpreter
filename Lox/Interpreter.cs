@@ -324,8 +324,16 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
     public bool Visit(Class stmt)
     {
         environment.Define(stmt.Name.Lexeme, null);
+
+        var methods = new Dictionary<string, LoxFunction>();
+
+        foreach(var method in stmt.Methods)
+        {
+            var function = new LoxFunction(method, environment);
+            methods[method.Name.Lexeme] = function;
+        }
         
-        var cls = new LoxClass(stmt.Name.Lexeme);
+        var cls = new LoxClass(stmt.Name.Lexeme, methods);
         
         environment.Assign(stmt.Name, cls);
 
@@ -339,5 +347,18 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
             return obj.Get(expr.Name);
 
         throw new RuntimeException(expr.Name, "Only instances have properties");
+    }
+
+    public object? Visit(Set expr)
+    {
+        var obj = Evaluate(expr.Object) as LoxInstance;
+
+        if (obj == null)
+            throw new RuntimeException(expr.Name, "Only instances have properties");
+
+        var value = Evaluate(expr.Value);
+        obj.Set(expr.Name, value);
+
+        return value;
     }
 }

@@ -16,7 +16,8 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
     private enum FunctionType
     {
         None,
-        Function
+        Function,
+        Method
     }
 
     public Resolver(Interpreter interpreter) 
@@ -231,11 +232,26 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
         Declare(stmt.Name);
         Define(stmt.Name);
 
+        foreach (var method in stmt.Methods)
+        {
+            var declaration = FunctionType.Function;
+            ResolveFunction(method, declaration);
+        }
+            
+
         return true;
     }
 
     public bool Visit(Get expr)
     {
+        Resolve(expr.Object);
+
+        return true;
+    }
+
+    public bool Visit(Set expr)
+    {
+        Resolve(expr.Value);
         Resolve(expr.Object);
 
         return true;
