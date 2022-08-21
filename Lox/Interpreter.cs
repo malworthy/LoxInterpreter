@@ -361,4 +361,9 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
 
         return value;
     }
+
+    public object? Visit(This expr)
+    {
+        return LookUpVariable(expr.Keyword, expr);
+    }
 }

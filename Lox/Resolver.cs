@@ -232,12 +232,16 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
         Declare(stmt.Name);
         Define(stmt.Name);
 
+        BeginScope();
+        scopes.Peek()["this"] = true;
+
         foreach (var method in stmt.Methods)
         {
             var declaration = FunctionType.Function;
             ResolveFunction(method, declaration);
         }
-            
+
+        EndScope();
 
         return true;
     }
@@ -253,6 +257,13 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
     {
         Resolve(expr.Value);
         Resolve(expr.Object);
+
+        return true;
+    }
+
+    public bool Visit(This expr)
+    {
+        ResolveLocal(expr, expr.Keyword);
 
         return true;
     }

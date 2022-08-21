@@ -63,6 +63,7 @@ public class InterpreterTests
     [Theory]
     [InlineData("Functions.txt","Hi, Dear Reader!")]
     [InlineData("Classes.lox", "Bagel instance\r\nCrunch crunch crunch!")]
+    [InlineData("This.lox", "The German chocolate cake is delicious!")]
     public void TestProgramsSimpleResult(string programFile, string expected)
     {
         var prog = GetFileContents(programFile);

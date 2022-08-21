@@ -11,6 +11,7 @@ public interface IVisitor<T>
     T Visit(Assign expr);
     T Visit(Binary expr);
     T Visit(Grouping expr);
+    T Visit(This expr);
     T Visit(Literal expr);
     T Visit(Unary expr);
     T Visit(Get expr);

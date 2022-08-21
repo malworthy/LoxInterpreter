@@ -21,6 +21,7 @@
     <None Remove="TestPrograms\Functions.txt" />
     <None Remove="TestPrograms\RecursiveFunction.txt" />
     <None Remove="TestPrograms\RecursiveFunctionER.txt" />
+    <None Remove="TestPrograms\this.lox" />
     <None Remove="TestPrograms\While.txt" />
     <None Remove="TestPrograms\WhileER.txt" />
   </ItemGroup>
@@ -38,6 +39,7 @@
     <EmbeddedResource Include="TestPrograms\Functions.txt" />
     <EmbeddedResource Include="TestPrograms\RecursiveFunctionER.txt" />
     <EmbeddedResource Include="TestPrograms\RecursiveFunction.txt" />
+    <EmbeddedResource Include="TestPrograms\This.lox" />
     <EmbeddedResource Include="TestPrograms\While.txt" />
     <EmbeddedResource Include="TestPrograms\WhileER.txt" />
   </ItemGroup>

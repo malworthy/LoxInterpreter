@@ -61,6 +61,11 @@ public class AstPrinter : IVisitor<string>
         throw new NotImplementedException();
     }
 
+    public string Visit(This expr)
+    {
+        throw new NotImplementedException();
+    }
+
     private String Parenthesize(String name, params Expr[] exprs)
     {
         StringBuilder builder = new StringBuilder();

@@ -37,4 +37,13 @@ public class LoxFunction : ICallable
         
         return null;
     }
+
+    internal LoxFunction Bind(LoxInstance loxInstance)
+    {
+        var env = new Environment(closure);
+
+        env.Define("this", loxInstance);
+
+        return new LoxFunction(declaration, env);
+    }
 }

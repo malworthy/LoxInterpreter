@@ -439,6 +439,7 @@ public class Parser
         if (Match(TokenType.TRUE)) return new Literal(true);
         if (Match(TokenType.NIL)) return new Literal(null);
         if (Match(TokenType.NUMBER, TokenType.STRING)) return new Literal(Previous().Literal);
+        if (Match(TokenType.THIS)) return new Expressions.This(Previous());
         if (Match(TokenType.IDENTIFIER)) return new Expressions.Variable(Previous());
 
         if (Match(TokenType.LEFT_PAREN))
