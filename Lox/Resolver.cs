@@ -12,12 +12,20 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
     private readonly Interpreter interpreter;
     private readonly Stack<Dictionary<string, bool>> scopes = new();
     private FunctionType currentFunction = FunctionType.None;
+    private ClassType currentClass = ClassType.None;
 
     private enum FunctionType
     {
         None,
         Function,
-        Method
+        Method,
+        Initializer
+    }
+
+    private enum ClassType
+    {
+        None,
+        Class
     }
 
     public Resolver(Interpreter interpreter) 
@@ -221,6 +229,9 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
         if (currentFunction == FunctionType.None)
             Lox.Error(stmt.Keyword, "Can't return from top level code");
 
+        if (currentFunction == FunctionType.Initializer && stmt.Value != null)
+            Lox.Error(stmt.Keyword, "Can't return from an initializer");
+
         if (stmt.Value != null)
             Resolve(stmt.Value);
 
@@ -229,6 +240,9 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
 
     public bool Visit(Class stmt)
     {
+        var enclosingClass = currentClass;
+
+        currentClass = ClassType.Class;
         Declare(stmt.Name);
         Define(stmt.Name);
 
@@ -238,10 +252,15 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
         foreach (var method in stmt.Methods)
         {
             var declaration = FunctionType.Function;
+            
+            if (method.Name.Lexeme == "init")
+                declaration = FunctionType.Initializer;
+
             ResolveFunction(method, declaration);
         }
 
         EndScope();
+        currentClass = enclosingClass;
 
         return true;
     }
@@ -263,6 +282,12 @@ public class Resolver : Expressions.IVisitor<bool>, Statements.IVisitor<bool>
 
     public bool Visit(This expr)
     {
+        if (currentClass == ClassType.None)
+        {
+            Lox.Error(expr.Keyword, "Can't use 'this' outside a class.");
+            return false;
+        }
+
         ResolveLocal(expr, expr.Keyword);
 
         return true;

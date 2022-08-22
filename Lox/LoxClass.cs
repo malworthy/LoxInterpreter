@@ -11,11 +11,14 @@ internal class LoxClass : ICallable
         this.methods = methods;
     }
 
-    public int Arity => 0;
+    public int Arity => FindMethod("init")?.Arity ?? 0;
 
     public object? Call(Interpreter interpreter, List<object?> arguments)
     {
         var instance = new LoxInstance(this);
+        var initializer = FindMethod("init");
+        
+        initializer?.Bind(instance)?.Call(interpreter, arguments);
 
         return instance;
     }

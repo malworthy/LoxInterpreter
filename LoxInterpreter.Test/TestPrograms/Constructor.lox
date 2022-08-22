@@ -1,0 +1,12 @@
+﻿
+
+class Test {
+  init() {
+    this.theword = "love";
+  }
+  test_it() {
+    print this.theword;
+  }
+}
+
+Test().test_it(); // Prints "love"

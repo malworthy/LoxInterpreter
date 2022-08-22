@@ -310,7 +310,7 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
 
     public bool Visit(Function stmt)
     {
-        var function = new LoxFunction(stmt, environment);
+        var function = new LoxFunction(stmt, environment, false);
         environment.Define(stmt.Name.Lexeme, function);
         return true;
     }
@@ -329,7 +329,7 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
 
         foreach(var method in stmt.Methods)
         {
-            var function = new LoxFunction(method, environment);
+            var function = new LoxFunction(method, environment, method.Name.Lexeme == "init");
             methods[method.Name.Lexeme] = function;
         }
         
