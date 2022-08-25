@@ -250,6 +250,33 @@ public class Parser
     {
         var expr = Or();
 
+        if (Match(TokenType.PLUS_PLUS))
+        {
+            var variable = expr as Variable;
+
+            if (variable == null)
+            {
+                Error(Peek(), "Can only apply ++ to a variable.");
+                return expr;
+            }
+
+            var plus = new Token 
+            { 
+                Lexeme = "+", 
+                Line = variable?.Name.Line ?? 0, 
+                Type = TokenType.PLUS
+            };
+
+            var value = new Binary
+            {
+                Left = expr,
+                Operator = plus,
+                Right = new Literal(1M)
+            };
+
+            return new Assign(variable!.Name, value);
+        }
+
         if (Match(TokenType.EQUAL))
         {
             Token equals = Previous();
@@ -371,7 +398,7 @@ public class Parser
             Expr right = Factor();
             expr = new Binary { Left= expr, Operator = oper, Right= right };
         }
-
+        
         return expr;
     }
 

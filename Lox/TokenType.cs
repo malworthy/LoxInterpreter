@@ -24,8 +24,8 @@ public enum TokenType
     AND, CLASS, ELSE, FALSE, FUN, FOR, IF, NIL, OR,
     PRINT, RETURN, SUPER, THIS, TRUE, VAR, WHILE,
 
-    // Keywords - My Customizaton of Lox Language (TODO)
- 
+    // My Customizaton of Lox Language
+    PLUS_PLUS,
 
     EOF
 }

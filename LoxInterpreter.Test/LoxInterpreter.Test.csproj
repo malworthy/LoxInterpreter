@@ -18,6 +18,7 @@
     <None Remove="TestPrograms\ConditionalExecution.txt" />
     <None Remove="TestPrograms\ConditionalExecutionER.txt" />
     <None Remove="TestPrograms\Constructor.lox" />
+    <None Remove="TestPrograms\Expression.lox" />
     <None Remove="TestPrograms\For.txt" />
     <None Remove="TestPrograms\Functions.txt" />
     <None Remove="TestPrograms\Inheritence.lox" />
@@ -40,6 +41,7 @@
     <EmbeddedResource Include="TestPrograms\Classes.lox" />
     <EmbeddedResource Include="TestPrograms\ConditionalExecution.txt" />
     <EmbeddedResource Include="TestPrograms\ConditionalExecutionER.txt" />
+    <EmbeddedResource Include="TestPrograms\Expression.lox" />
     <EmbeddedResource Include="TestPrograms\For.txt" />
     <EmbeddedResource Include="TestPrograms\Functions.txt" />
     <EmbeddedResource Include="TestPrograms\Inheritence.lox" />

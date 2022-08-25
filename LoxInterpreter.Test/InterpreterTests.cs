@@ -67,6 +67,7 @@ public class InterpreterTests
     [InlineData("This.lox", "The German chocolate cake is delicious!")]
     [InlineData("Constructor.lox","love")]
     [InlineData("Inheritence.lox", "Fry until golden brown.")]
+    [InlineData("Expression.lox","51")]
     public void TestProgramsSimpleResult(string programFile, string expected)
     {
         var prog = GetFileContents(programFile);
