@@ -323,7 +323,21 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
 
     public bool Visit(Class stmt)
     {
+        object? superclass = null;
+        if (stmt.Superclass != null)
+        {
+            superclass = Evaluate(stmt.Superclass);
+            if (!(superclass is LoxClass))
+                throw new RuntimeException(stmt.Superclass.Name, "Superclass must be a class.");
+        }
+
         environment.Define(stmt.Name.Lexeme, null);
+
+        if(stmt.Superclass != null)
+        {
+            environment = new Environment(environment);
+            environment.Define("super", superclass);
+        }
 
         var methods = new Dictionary<string, LoxFunction>();
 
@@ -333,7 +347,10 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
             methods[method.Name.Lexeme] = function;
         }
         
-        var cls = new LoxClass(stmt.Name.Lexeme, methods);
+        var cls = new LoxClass(stmt.Name.Lexeme, (LoxClass)superclass, methods);
+
+        if (superclass != null && environment.Enclosing != null)
+            environment = environment.Enclosing;
         
         environment.Assign(stmt.Name, cls);
 
@@ -365,5 +382,21 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
     public object? Visit(This expr)
     {
         return LookUpVariable(expr.Keyword, expr);
+    }
+
+    public object? Visit(Super expr)
+    {
+        var distance = locals[expr];
+        var superClass = environment.GetAt(distance, "super") as LoxClass;
+        var obj = environment.GetAt(distance-1, "this") as LoxInstance;
+        var method = superClass?.FindMethod(expr.Method.Lexeme);
+
+        if (method == null)
+            throw new RuntimeException(expr.Method, $"Undefined property {expr.Method.Lexeme}.");
+
+        if (obj == null) return null;
+
+        return method?.Bind(obj);
+
     }
 }

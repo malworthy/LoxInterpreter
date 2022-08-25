@@ -69,6 +69,15 @@ public class Parser
     {
         var name = Consume(TokenType.IDENTIFIER, "Expect class name");
 
+        Variable? superclass = null;
+
+        if (Match(TokenType.LESS))
+        {
+            Consume(TokenType.IDENTIFIER, "Expect superclass name");
+            superclass = new Variable(Previous());
+        }
+
+
         Consume(TokenType.LEFT_BRACE, "Missing {");
 
         var methods = new List<Function>();
@@ -78,20 +87,18 @@ public class Parser
 
         Consume(TokenType.RIGHT_BRACE, "Missing }");
 
-        return new Statements.Class(name, methods);
+        return new Statements.Class(name, superclass, methods);
 
     }
 
-    private Function? Function(string kind)
+    private Function Function(string kind)
     {
         var name = Consume(TokenType.IDENTIFIER, $"Expect {kind} name.");
 
-        // for anonomous functions???
-        //var name = Check(TokenType.IDENTIFIER) ? Consume(TokenType.IDENTIFIER, $"Expect {kind} name.") :
-        //    new Token { Type = TokenType.IDENTIFIER, Lexme = Guid.NewGuid().ToString()};
-
         Consume(TokenType.LEFT_PAREN, $"Missing '(' after {kind}.");
+        
         var parameters = new List<Token>();
+        
         if (!Check(TokenType.RIGHT_PAREN))
         {
             do
@@ -101,9 +108,12 @@ public class Parser
                 parameters.Add(Consume(TokenType.IDENTIFIER,"Expect parameter name"));
             } while (Match(TokenType.COMMA));
         }
+        
         Consume(TokenType.RIGHT_PAREN, "Missing ')'");
         Consume(TokenType.LEFT_BRACE, $"Missing '{{' at start of {kind} body. ");
+        
         var body = GetBlock();
+
         return new Statements.Function(name, parameters, body);
     }
 
@@ -440,6 +450,15 @@ public class Parser
         if (Match(TokenType.NIL)) return new Literal(null);
         if (Match(TokenType.NUMBER, TokenType.STRING)) return new Literal(Previous().Literal);
         if (Match(TokenType.THIS)) return new Expressions.This(Previous());
+
+        if (Match(TokenType.SUPER))
+        {
+            var keyword = Previous();
+            Consume(TokenType.DOT, "Expect '.' after super");
+            var method = Consume(TokenType.IDENTIFIER, "Expect superclass method name");
+            return new Expressions.Super(keyword, method);
+        }
+
         if (Match(TokenType.IDENTIFIER)) return new Expressions.Variable(Previous());
 
         if (Match(TokenType.LEFT_PAREN))

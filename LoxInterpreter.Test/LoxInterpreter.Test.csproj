@@ -20,8 +20,11 @@
     <None Remove="TestPrograms\Constructor.lox" />
     <None Remove="TestPrograms\For.txt" />
     <None Remove="TestPrograms\Functions.txt" />
+    <None Remove="TestPrograms\Inheritence.lox" />
     <None Remove="TestPrograms\RecursiveFunction.txt" />
     <None Remove="TestPrograms\RecursiveFunctionER.txt" />
+    <None Remove="TestPrograms\super.lox" />
+    <None Remove="TestPrograms\super.txt" />
     <None Remove="TestPrograms\this.lox" />
     <None Remove="TestPrograms\While.txt" />
     <None Remove="TestPrograms\WhileER.txt" />
@@ -39,8 +42,11 @@
     <EmbeddedResource Include="TestPrograms\ConditionalExecutionER.txt" />
     <EmbeddedResource Include="TestPrograms\For.txt" />
     <EmbeddedResource Include="TestPrograms\Functions.txt" />
+    <EmbeddedResource Include="TestPrograms\Inheritence.lox" />
     <EmbeddedResource Include="TestPrograms\RecursiveFunctionER.txt" />
     <EmbeddedResource Include="TestPrograms\RecursiveFunction.txt" />
+    <EmbeddedResource Include="TestPrograms\super.lox" />
+    <EmbeddedResource Include="TestPrograms\super.txt" />
     <EmbeddedResource Include="TestPrograms\This.lox" />
     <EmbeddedResource Include="TestPrograms\While.txt" />
     <EmbeddedResource Include="TestPrograms\WhileER.txt" />

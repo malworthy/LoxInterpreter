@@ -10,6 +10,7 @@ public class Environment
 {
     private readonly Dictionary<string, object?> values = new();
     private readonly Environment? enclosing = null;
+    public Environment? Enclosing => enclosing;
 
     public Environment()
     {

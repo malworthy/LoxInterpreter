@@ -52,6 +52,7 @@ public class InterpreterTests
     [InlineData("For.txt", "WhileER.txt")]
     [InlineData("RecursiveFunction.txt", "RecursiveFunctionER.txt")]
     [InlineData("BlockScope2.txt","BlockScope2ER.txt")]
+    [InlineData("super.lox","super.txt")]
     public void TestPrograms(string programFile, string expectedResultFile)
     {
         var prog = GetFileContents(programFile);
@@ -65,6 +66,7 @@ public class InterpreterTests
     [InlineData("Classes.lox", "Bagel instance\r\nCrunch crunch crunch!")]
     [InlineData("This.lox", "The German chocolate cake is delicious!")]
     [InlineData("Constructor.lox","love")]
+    [InlineData("Inheritence.lox", "Fry until golden brown.")]
     public void TestProgramsSimpleResult(string programFile, string expected)
     {
         var prog = GetFileContents(programFile);

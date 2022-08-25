@@ -1,14 +1,17 @@
 ﻿namespace LoxInterpreter;
 
-internal class LoxClass : ICallable
+public class LoxClass : ICallable
 {
     private readonly string name;
     private readonly Dictionary<string, LoxFunction> methods;
 
-    public LoxClass(string name, Dictionary<string, LoxFunction> methods)
+    public LoxClass? Superclass { get; init; }
+
+    public LoxClass(string name, LoxClass superclass, Dictionary<string, LoxFunction> methods)
     {
         this.name = name;
         this.methods = methods;
+        Superclass = superclass;
     }
 
     public int Arity => FindMethod("init")?.Arity ?? 0;
@@ -30,6 +33,6 @@ internal class LoxClass : ICallable
         if(methods.ContainsKey(name))
             return methods[name];
 
-        return null;
+        return Superclass?.FindMethod(name);
     }
 }

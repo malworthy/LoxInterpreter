@@ -14,6 +14,7 @@ public interface IVisitor<T>
     T Visit(This expr);
     T Visit(Literal expr);
     T Visit(Unary expr);
+    T Visit(Super expr);
     T Visit(Get expr);
     T Visit(Variable expr);
     T Visit(Logical expr);
