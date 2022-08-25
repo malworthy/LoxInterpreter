@@ -22,6 +22,7 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
         environment = globals;
 
         globals.Define("clock", new Clock());
+        globals.Define("input", new Input());
     }
     public string Interpret(Expr expr)
     {

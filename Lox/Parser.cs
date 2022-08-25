@@ -124,11 +124,8 @@ public class Parser
 
         if (Match(TokenType.EQUAL))
         {
-            //if (Match(TokenType.FUN))
-            //    initializer = Function("function");
             initializer = Expression();
         }
-            
 
         Consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.");
         return new Statements.Var(name, initializer);
