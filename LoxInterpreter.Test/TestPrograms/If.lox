@@ -1,0 +1,7 @@
+﻿var count = 1;
+var index = 0;
+
+if (count == 1 and index == 0) 
+{
+    print "hello";
+}

@@ -249,34 +249,7 @@ public class Parser
     private Expr Assignment()
     {
         var expr = Or();
-
-        if (Match(TokenType.PLUS_PLUS))
-        {
-            var variable = expr as Variable;
-
-            if (variable == null)
-            {
-                Error(Peek(), "Can only apply ++ to a variable.");
-                return expr;
-            }
-
-            var plus = new Token 
-            { 
-                Lexeme = "+", 
-                Line = variable?.Name.Line ?? 0, 
-                Type = TokenType.PLUS
-            };
-
-            var value = new Binary
-            {
-                Left = expr,
-                Operator = plus,
-                Right = new Literal(1M)
-            };
-
-            return new Assign(variable!.Name, value);
-        }
-
+        
         if (Match(TokenType.EQUAL))
         {
             Token equals = Previous();
@@ -316,7 +289,7 @@ public class Parser
     {
         var expr = Equality();
 
-        while (Match(TokenType.OR))
+        while (Match(TokenType.AND))
         {
             var oper = Previous();
             var right = Equality();
@@ -416,6 +389,8 @@ public class Parser
         return expr;
     }
 
+    
+
     private Expr Unary()
     {
         if(Match(TokenType.BANG, TokenType.MINUS))
@@ -429,7 +404,7 @@ public class Parser
 
     private Expr Call()
     {
-        var expr = Primary();
+        var expr = Suffix(); // Primary();
         while (true)
         {
             if (Match(TokenType.LEFT_PAREN))
@@ -448,6 +423,40 @@ public class Parser
                 
         }
 
+        return expr;
+    }
+
+    private Expr Suffix()
+    {
+        var expr = Primary();
+
+        if (Match(TokenType.PLUS_PLUS, TokenType.MINUS_MINUS))
+        {
+            if (expr is Variable variable)
+            {
+                var token = Previous();
+                var plus = new Token
+                {
+                    Lexeme = "+",
+                    Line = variable?.Name.Line ?? 0,
+                    Type = TokenType.PLUS
+                };
+
+                var value = new Binary
+                {
+                    Left = expr,
+                    Operator = plus,
+                    Right = new Literal(token.Type == TokenType.PLUS_PLUS ? 1M : -1M)
+                };
+
+                return new Assign(variable!.Name, value);
+            }
+            else if (expr is Get get)
+            {
+                //TODO: need to handle this..
+            }
+        }
+        
         return expr;
     }
 

@@ -23,6 +23,8 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
 
         globals.Define("clock", new Clock());
         globals.Define("input", new Input());
+        globals.Define("substr", new Substr());
+        globals.Define("indexof", new Indexof());
     }
     public string Interpret(Expr expr)
     {
@@ -305,8 +307,14 @@ public class Interpreter : Expressions.IVisitor<object?>, Statements.IVisitor<bo
         if (arguments.Count != function.Arity)
             throw new RuntimeException(expr.Paran, "Incorrect number of arguments.");
 
-        return function?.Call(this, arguments);
-
+        try
+        {
+            return function?.Call(this, arguments);
+        }
+        catch (Exception ex)
+        {
+            throw new RuntimeException(expr.Paran,ex.Message);
+        }
     }
 
     public bool Visit(Function stmt)

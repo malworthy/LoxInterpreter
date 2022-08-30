@@ -1,0 +1,50 @@
+﻿class List
+{
+    init()
+    {
+        this.list = nil;
+        this.count = 0;
+    }
+
+    add(item)
+    {
+        if (this.list == nil)
+            this.list = item;
+        else
+            this.list = this.list + "|" + item;
+        
+        this.count++; // = this.count + 1;
+    }
+
+    get(index)
+    {
+        if (index > this.count or index < 0) 
+        {
+            return nil;
+        }
+        if (this.count == 1 and index == 0) 
+        {
+           return this.list;
+        }
+        var pipes = 0;
+        var end = 0;
+        var start = 0;
+        while (pipes <= index)
+        {
+            start = end;
+            end = indexof(this.list, "|", end);
+            //print(end);
+            pipes++;
+        }
+        return substr(this.list, start, end - start);
+    }
+}
+
+var x = List();
+x.add("this is a test");
+x.add("the secord item");
+x.add("the third");
+
+print x.get(0);
+//print x.get(1);
+//print x.get(2);

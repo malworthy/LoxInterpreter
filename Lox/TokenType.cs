@@ -25,7 +25,7 @@ public enum TokenType
     PRINT, RETURN, SUPER, THIS, TRUE, VAR, WHILE,
 
     // My Customizaton of Lox Language
-    PLUS_PLUS,
+    PLUS_PLUS, MINUS_MINUS,
 
     EOF
 }

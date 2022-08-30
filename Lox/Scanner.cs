@@ -56,7 +56,7 @@ public class Scanner
         const string tokens = "(){},.-+;*";
         char c = Advance();
         var index = tokens.IndexOf(c);
-        if (index >= 0 && c != '+')
+        if (index >= 0 && c != '+' && c != '-')
         {
             AddToken((TokenType)index);
         }
@@ -78,6 +78,9 @@ public class Scanner
             {
                 case '+':
                     AddToken(Match('+') ? TokenType.PLUS_PLUS : TokenType.PLUS);
+                    break;
+                case '-':
+                    AddToken(Match('-') ? TokenType.MINUS_MINUS : TokenType.MINUS);
                     break;
                 case '!':
                     AddToken(Match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
